@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paint Snake</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
+    <style>
+        
+        body{
+            background: #000;
+            text-align: center;
+            margin: 0px;
+            border: none;
+        }
+        
+        canvas{
+            position: absolute;
+            overflow: hidden;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            background-image: url(../www/sprites/fundo.jpg);
+            margin: 0 auto;
+        }
+        
+    </style>
+
+</head>  
+    
+<body>
+    
+    <div data-role='content'>
+        <script>
+
+            var canvas, paused = false, ctx, WIDTH, HEIGHT, FPS = 15, tileSize, playing, portrait;
+            //CODIGO DE CADA TECLA DO TECLADO
+            var keys = {
+                left : 37, 
+                up : 38, 
+                right : 39, 
+                down : 40,
+                pause : 80
+            };
+            var touchG = []; var offset = [];
+            var snake, food;
+
+            window.addEventListener("resize", resize);
+
+            window.addEventListener("keydown", keyDown);
+
+            window.addEventListener("touchstart", touchStart);
+
+            window.addEventListener("touchmove", touchMove);
+
+            window.addEventListener("touchend", touchEnd);
+
+
+        </script> 
+    </div>
+
+</body>
+</html>
