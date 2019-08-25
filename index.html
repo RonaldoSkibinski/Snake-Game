@@ -203,6 +203,19 @@
                         this.color = this.colorAlt[Math.floor(Math.random() * (8 - 1) + 1)];
                         this.body.push(nextPos);
                     }
+                    
+                    // SELFCOLISION
+                    
+                    for(var c=1; c < this.body.length; c++) {
+                        if(this.body[0][0] == this.body[c][0] && this.body[0][1] == this.body[c][1]) {
+                            this.color = "#ff0000";
+                            for(var i = 0; i < this.body.length; i++){
+                                ctx.fillRect(this.body[i][0] * tileSize, this.body[i][1] * tileSize, tileSize, tileSize);
+                            }
+                            paused = true;
+                            setTimeout(newGame, 1000);                            
+                        }
+                    }
 
                     this.body.pop();
                     this.body.splice(0, 0, nextPos);
@@ -227,23 +240,19 @@
                 this.eater = 0;
                 this.body = [[10,8]];
                 this.color = "#DD2020";
-                var nextPos = [this.body[0][0] = Math.floor(Math.random() * ((canvas.width / tileSize) - 0)) + 0, this.body[0][1] = Math.floor(Math.random() * ((canvas.height / tileSize) - 0)) + 0];
-                for(var c = 0; c < snake.body.length; c++){
-                    if (nextPos[0] == snake.body[c][0] && nextPos[1] == snake.body[c][1]){
-                        nextPos = [this.body[0][0] = Math.floor(Math.random() * ((canvas.width / tileSize) - 0)) + 0, this.body[0][1] = Math.floor(Math.random() * ((canvas.height / tileSize) - 0)) + 0];
-                    }         
-                }
+                this.nextPos = [this.body[0][0] = Math.floor(Math.random() * ((canvas.width / tileSize) - 0)) + 0, this.body[0][1] = Math.floor(Math.random() * ((canvas.height / tileSize) - 0)) + 0];
+               
                 this.update = function() {
                     if(this.eat.status){
                         if(this.eater == 4){
-                            nextPos = [this.body[0][0] = Math.floor(Math.random() * ((canvas.width / tileSize) - 0)) + 0, this.body[0][1] = Math.floor(Math.random() * ((canvas.height / tileSize) - 0)) + 0];
+                            this.nextPos = [this.body[0][0] = Math.floor(Math.random() * ((canvas.width / tileSize) - 0)) + 0, this.body[0][1] = Math.floor(Math.random() * ((canvas.height / tileSize) - 0)) + 0];
                             this.eat.status = false;
                             score.score += 150;
                             this.eater= 0;  
                             FPS += 0.5;
                             this.color = "#DD2020";
                         }else{
-                            nextPos = [this.body[0][0] = Math.floor(Math.random() * ((canvas.width / tileSize) - 0)) + 0, this.body[0][1] =     Math.floor(Math.random() * ((canvas.height / tileSize) - 0)) + 0];
+                            this.nextPos = [this.body[0][0] = Math.floor(Math.random() * ((canvas.width / tileSize) - 0)) + 0, this.body[0][1] =     Math.floor(Math.random() * ((canvas.height / tileSize) - 0)) + 0];
                             this.eat.status = false;
                             score.score += 50;
                             this.eater++;
@@ -260,7 +269,7 @@
                     }
 
                     this.body.pop();
-                    this.body.splice(0, 0, nextPos);
+                    this.body.splice(0, 0, this.nextPos);
                 }
 
                 this.draw = function(){
