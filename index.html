@@ -33,7 +33,7 @@
     <div data-role='content'>
         <script>
 
-            var canvas, paused = false, ctx, WIDTH, HEIGHT, FPS = 15, tileSize, playing, portrait;
+            var canvas, paused = false, ctx, WIDTH, HEIGHT, FPS = 15, tileSize, playing = false, portrait;
             //CODIGO DE CADA TECLA DO TECLADO
             var keys = {
                 left : 37, 
@@ -82,7 +82,9 @@
 
 
             function keyDown(evt) {
-                paused = false;
+                if(playing == true && paused == true){
+                    paused = false;
+                }
                 switch(evt.keyCode){
                     case keys.left:
                         if(snake.direction[0] == 1){
@@ -204,17 +206,17 @@
                         this.body.push(nextPos);
                     }
                     
-                    // SELFCOLISION
-                    
+                    // SELFCOLISION                    
                     for(var c=1; c < this.body.length; c++) {
                         if(this.body[0][0] == this.body[c][0] && this.body[0][1] == this.body[c][1]) {
-                            this.color = "#ff0000";
-                            for(var i = 0; i < this.body.length; i++){
-                                ctx.fillRect(this.body[i][0] * tileSize, this.body[i][1] * tileSize, tileSize, tileSize);
-                            }
-                            paused = true;
-                            setTimeout(newGame, 1000);                            
+                            lose();                      
                         }
+                    }
+                    
+                    
+                    // WALL COLISION
+                    if(nextPos[0] == 0 || nextPos[1] == [0] || nextPos[0] == (WIDTH / tileSize) || nextPos[1] == Math.trunc(HEIGHT / tileSize)) {
+                        lose();
                     }
 
                     this.body.pop();
@@ -262,12 +264,6 @@
                         }
                     }
 
-                    if(!playing) {
-
-                    }else{
-
-                    }
-
                     this.body.pop();
                     this.body.splice(0, 0, this.nextPos);
                 }
@@ -292,7 +288,6 @@
             // FUNÇÃO INICIA O JOGO ---------------------------------------------------------------|>-----------------------------------------------------
 
             function init() {
-
                 canvas = document.createElement("canvas");
                 resize();
                 document.body.appendChild(canvas);
@@ -312,6 +307,7 @@
                 snake = new Snake();
                 food = new Food();
                 score = new Score();
+                playing = true;
                 paused = true;
             }
 
@@ -339,10 +335,8 @@
                 if(paused == true){
                     draw();
                 }else{
-
                     update();
                     draw();
-
                 }
 
                 setTimeout(run, 1000 / FPS);
@@ -363,6 +357,22 @@
             }
 
             // FIM FUNÇÃO DESENHA ------------------------------------------------------------------DRAW----------------------------------------------/END
+            
+            
+            
+            // FUNÇÃO LOSE ---------------------------------------------------------------------LOSE---------------------------------------------------
+
+            function lose() { 
+                snake.color = "#ff0000";
+                for(var i = 0; i < snake.body.length; i++){
+                    ctx.fillRect(snake.body[i][0] * tileSize, snake.body[i][1] * tileSize, tileSize, tileSize);
+                }   
+                paused = true;
+                playing = false;
+                setTimeout(newGame, 1000);  
+            }
+
+            // FIM FUNÇÃO DESENHA ------------------------------------------------------------------LOSE----------------------------------------------/END
 
             init();
 
